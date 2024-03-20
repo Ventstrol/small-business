@@ -42,7 +42,7 @@ services:
       AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
       AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
     volumes:
-      - ./media:/media
+      - ./config/authentik/media:/media
       - ./config/authentik/custom-templates:/templates
     env_file:
       - .env

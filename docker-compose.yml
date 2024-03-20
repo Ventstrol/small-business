@@ -43,7 +43,7 @@ services:
       AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
     volumes:
       - ./media:/media
-      - ./custom-templates:/templates
+      - ./config/authentik/custom-templates:/templates
     env_file:
       - .env
     ports:
@@ -71,9 +71,9 @@ services:
     user: root
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./media:/media
-      - ./certs:/certs
-      - ./custom-templates:/templates
+      - ./config/authentik/media:/media
+      - ./config/authentik/certs:/certs
+      - ./config/authentik/custom-templates:/templates
     env_file:
       - .env
     depends_on:
@@ -102,20 +102,20 @@ services:
       # DISABLE_IPV6: 'true'
 
     volumes:
-      - ./data:/data
-      - ./letsencrypt:/etc/letsencrypt
+      - ./config/nginx/data:/data
+      - ./config/nginx/letsencrypt:/etc/letsencrypt
 
   grist:
     restart: unless-stopped
     image: "gristlabs/grist:latest"
     environment:
       DEBUG: "1"
-      APP_HOME_URL: "https://grist.chayman.ru"
-      APP_DOC_URL: "https://grist.chayman.ru"
-      APP_STATIC_URL: "https://grist.chayman.ru"
-      GRIST_SAML_SP_HOST: "https://grist.chayman.ru"
-      GRIST_SAML_IDP_LOGIN: "https://idp.chayman.ru/application/saml/grist/sso/binding/redirect/"
-      GRIST_SAML_IDP_LOGOUT: "https://idp.chayman.ru/if/session-end/grist/"
+      APP_HOME_URL: "https://grist.domain.com"
+      APP_DOC_URL: "https://grist.domain.com"
+      APP_STATIC_URL: "https://grist.domain.com"
+      GRIST_SAML_SP_HOST: "https://grist.domain.com"
+      GRIST_SAML_IDP_LOGIN: "https://idp.domain.com/application/saml/grist/sso/binding/redirect/"
+      GRIST_SAML_IDP_LOGOUT: "https://idp.domain.com/if/session-end/grist/"
       GRIST_SAML_SP_KEY: "/persist/private.pem"
       GRIST_SAML_SP_CERT: "/persist/cert.pem"
       GRIST_SAML_IDP_CERTS: "/persist/cert.pem"
@@ -123,7 +123,7 @@ services:
     ports:
       - "8484:8484"
     volumes:
-      - ./persist:/persist
+      - ./config/grist:/persist
 
 volumes:
   database:

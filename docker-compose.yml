@@ -120,10 +120,31 @@ services:
       GRIST_SAML_SP_CERT: "/persist/cert.pem"
       GRIST_SAML_IDP_CERTS: "/persist/cert.pem"
       GRIST_SAML_IDP_UNENCRYPTED: "1"
+      GRIST_DOCS_MINIO_ACCESS_KEY: "access"
+      GRIST_DOCS_MINIO_SECRET_KEY: "secret"
+      GRIST_DOCS_MINIO_BUCKET: "grist"
+      GRIST_DOCS_MINIO_ENDPOINT: "minio"
+      GRIST_DOCS_MINIO_USE_SSL: "0"
+      GRIST_DOCS_MINIO_PORT: "9000"
     ports:
       - "8484:8484"
     volumes:
       - ./config/grist:/persist
+
+  minio:
+    restart: unless-stopped
+    container_name: "minio"
+    hostname: "minio"
+    image: "minio/minio:latest"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - ./config/minio:/minio
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: password
+    command: server --console-address ":9001" /data
 
 volumes:
   database:
@@ -132,3 +153,5 @@ volumes:
     driver: local
   persist:
     name: persist
+  minio: {}
+    
